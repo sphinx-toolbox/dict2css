@@ -9,7 +9,7 @@ assignee: 'domdfcoding'
 primary_conda_channel: 'domdfcoding'
 version: '0.0.0'
 license: 'MIT'
-short_desc: 'A μ-library for constructing cascasing style sheets from Python dictionaries.'
+short_desc: 'A μ-library for constructing cascading style sheets from Python dictionaries.'
 
 enable_conda: false
 

@@ -13,7 +13,7 @@ sys.path.append('.')
 from __pkginfo__ import *  # pylint: disable=wildcard-import
 
 setup(
-		description="A μ-library for constructing cascasing style sheets from Python dictionaries.",
+		description="A μ-library for constructing cascading style sheets from Python dictionaries.",
 		extras_require=extras_require,
 		install_requires=install_requires,
 		py_modules=[],

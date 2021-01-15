@@ -4,7 +4,7 @@ dict2css
 
 .. start short_desc
 
-**A μ-library for constructing cascasing style sheets from Python dictionaries.**
+**A μ-library for constructing cascading style sheets from Python dictionaries.**
 
 .. end short_desc
 
