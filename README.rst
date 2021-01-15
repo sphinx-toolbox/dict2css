@@ -21,6 +21,8 @@ dict2css
 	  - |actions_linux| |actions_windows| |actions_macos| |coveralls|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
+	* - Anaconda
+	  - |conda-version| |conda-platform|
 	* - Activity
 	  - |commits-latest| |commits-since| |maintained| |pypi-downloads|
 	* - QA
@@ -84,6 +86,14 @@ dict2css
 	:target: https://pypi.org/project/dict2css/
 	:alt: PyPI - Wheel
 
+.. |conda-version| image:: https://img.shields.io/conda/v/domdfcoding/dict2css?logo=anaconda
+	:target: https://anaconda.org/domdfcoding/dict2css
+	:alt: Conda - Package Version
+
+.. |conda-platform| image:: https://img.shields.io/conda/pn/domdfcoding/dict2css?label=conda%7Cplatform
+	:target: https://anaconda.org/domdfcoding/dict2css
+	:alt: Conda - Platform
+
 .. |license| image:: https://img.shields.io/github/license/sphinx-toolbox/dict2css
 	:target: https://github.com/sphinx-toolbox/dict2css/blob/master/LICENSE
 	:alt: License
@@ -117,12 +127,27 @@ Installation
 
 .. start installation
 
-``dict2css`` can be installed from PyPI.
+``dict2css`` can be installed from PyPI or Anaconda.
 
 To install with ``pip``:
 
 .. code-block:: bash
 
 	$ python -m pip install dict2css
+
+To install with ``conda``:
+
+	* First add the required channels
+
+	.. code-block:: bash
+
+		$ conda config --add channels http://conda.anaconda.org/conda-forge
+		$ conda config --add channels http://conda.anaconda.org/domdfcoding
+
+	* Then install
+
+	.. code-block:: bash
+
+		$ conda install dict2css
 
 .. end installation
