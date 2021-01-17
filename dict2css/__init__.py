@@ -29,12 +29,18 @@ A μ-library for constructing cascasing style sheets from Python dictionaries.
 #
 
 # stdlib
-from contextlib import contextmanager
-from typing import IO, Iterator, Mapping, Sequence, Union
+from io import TextIOBase
+from typing import IO, Any, Dict, Mapping, MutableMapping, Sequence, Union, cast
 
 # 3rd party
 import css_parser  # type: ignore
+from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.typing import PathLike
 from domdf_python_tools.words import TAB
+
+# this package
+from dict2css.helpers import em, px, rem
+from dict2css.serializer import CSSSerializer
 
 __author__: str = "Dominic Davis-Foster"
 __copyright__: str = "2020-2021 Dominic Davis-Foster"
@@ -42,12 +48,24 @@ __license__: str = "MIT License"
 __version__: str = "0.1.0"
 __email__: str = "dominic@davis-foster.co.uk"
 
-__all__ = ["dumps", "dump", "CSSSerializer", "StyleSheet", "em", "make_style", "px", "rem", "Style", "IMPORTANT"]
+__all__ = [
+		"dumps",
+		"dump",
+		"load",
+		"loads",
+		"StyleSheet",
+		"make_style",
+		"Style",
+		"IMPORTANT",
+		]
 
 #: The string ``'important'``.
 IMPORTANT = "important"
 
-Style = Mapping[str, Union[Sequence, str, int, None]]
+# Property = Union[Tuple[Union[str, int, None], str], str, int, None]
+Property = Union[Sequence, str, int, None]
+
+Style = Mapping[str, Property]
 """
 Type annotation representing a style for :func:`~.make_style` and :func:`~.dumps`.
 
@@ -56,13 +74,13 @@ The keys are CSS properties.
 The values can be either:
 
 * A :class:`str`, :class:`float` or :py:obj:`None`, giving the value of the property.
-* A :class:`tuple` of the property's value (as above) and
-  :data:`~.IMPORTANT`, which sets ``!important`` on the property.
+* A :class:`tuple` of the property's value (as above) and the priority,
+  such as :data:`~.IMPORTANT` which sets ``!important`` on the property.
 """
 
 
 def dumps(
-		styles: Mapping[str, Style],
+		styles: Mapping[str, Union[Style, Mapping]],
 		*,
 		indent: str = TAB,
 		trailing_semicolon: bool = False,
@@ -72,6 +90,40 @@ def dumps(
 	r"""
 	Construct a cascading style sheet from a dictionary.
 
+	``styles`` is a mapping of CSS selector strings to styles, which map property names to their values:
+
+	.. code-block:: python
+
+		styles = {".wy-nav-content": {"max-width": (px(1200), IMPORTANT)}}
+		print(dumps(styles))
+
+	.. code-block:: css
+
+		.wy-nav-content {
+			max-width: 1200px !important
+		}
+
+	See the :py:obj:`~.Styles` object for more information on the layout.
+
+	The keys can also be media at-rules, with the values mappings of property names to their values:
+
+	.. code-block:: python
+
+		styles = {
+			"@media screen and (min-width: 870px)": {
+				".wy-nav-content": {"max-width": (px(1200), IMPORTANT)},
+				},
+			}
+
+	.. code-block:: css
+
+		@media screen and (min-width: 870px) {
+			.wy-nav-content {
+				max-width: 1200px !important
+			}
+		}
+		print(dumps(styles))
+
 	:param styles: A mapping of CSS selectors to styles.
 	:param indent: The indent to use, such as a tab (``\t``), two spaces or four spaces.
 	:param trailing_semicolon:  Whether to add a semicolon to the end of the final property.
@@ -79,6 +131,8 @@ def dumps(
 	:param minify: Minify the CSS. Overrides all other options.
 
 	:return: The style sheet as a string.
+
+	.. versionchanged:: 0.2.0  Added support for media at-rules.
 	"""
 
 	serializer = CSSSerializer(
@@ -88,11 +142,18 @@ def dumps(
 			minify=minify,
 			)
 
+	stylesheet: str = ''
+
 	with serializer.use():
 		sheet = StyleSheet()
 
 		for selector, style in styles.items():
-			sheet.add_style(selector, style)
+			if selector.startswith("@media"):
+				sheet.add_media_styles(selector.split("@media")[1].strip(), cast(Mapping[str, Style], style))
+			elif selector.startswith('@'):
+				raise NotImplementedError("Only @media at-rules are supported at this time.")
+			else:
+				sheet.add_style(selector, cast(Style, style))
 
 		stylesheet = sheet.tostring()
 
@@ -103,23 +164,62 @@ def dumps(
 
 
 def dump(
-		styles: Mapping[str, Style],
-		fp: IO,
+		styles: Mapping[str, Union[Style, Mapping]],
+		fp: Union[PathLike, IO],
 		*,
 		indent: str = TAB,
 		trailing_semicolon: bool = False,
 		indent_closing_brace: bool = False,
 		minify: bool = False,
-		):
+		) -> None:
 	r"""
 	Construct a cascading style sheet from a dictionary and write it to ``fp``.
 
+	.. code-block:: python
+
+		styles = {".wy-nav-content": {"max-width": (px(1200), IMPORTANT)}}
+		dump(styles, ...)
+
+	.. code-block:: css
+
+		.wy-nav-content {
+			max-width: 1200px !important
+		}
+
+	See the :py:obj:`~.Styles` object for more information on the layout.
+
+	The keys can also be media at-rules, with the values mappings of property names to their values:
+
+	.. code-block:: python
+
+		styles = {
+			"@media screen and (min-width: 870px)": {
+				".wy-nav-content": {"max-width": (px(1200), IMPORTANT)},
+				},
+			}
+		dump(styles, ...)
+
+	.. code-block:: css
+
+		@media screen and (min-width: 870px) {
+			.wy-nav-content {
+				max-width: 1200px !important
+			}
+		}
+
 	:param styles: A mapping of CSS selectors to styles.
-	:param fp: An open file handle.
+	:param fp: An open file handle, or the filename of a file to write to.
 	:param indent: The indent to use, such as a tab (``\t``), two spaces or four spaces.
 	:param trailing_semicolon:  Whether to add a semicolon to the end of the final property.
 	:param indent_closing_brace:
 	:param minify: Minify the CSS. Overrides all other options.
+
+	.. versionchanged:: 0.2.0
+
+		`fp` now accepts :py:obj:`domdf_python_tools.typing.PathLike` objects,
+		representing the path of a file to write to.
+
+	.. versionchanged:: 0.2.0  Added support for media at-rules.
 	"""
 
 	css = dumps(
@@ -130,71 +230,74 @@ def dump(
 			minify=minify,
 			)
 
-	fp.write(css)
+	if isinstance(fp, TextIOBase):
+		fp.write(css)
+	else:
+		PathPlus(fp).write_clean(css)
 
 
-class CSSSerializer(css_parser.CSSSerializer):
+def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 	r"""
-	Serializes a :class:`~.StyleSheet` and its parts.
+	Parse a cascading style sheet and return its dictionary representation.
 
-	This controls the formatting of the style sheet.
+	.. versionadded:: 0.2.0
 
-	:param indent: The indent to use, such as a tab (``\t``), two spaces or four spaces.
-	:param trailing_semicolon:  Whether to add a semicolon to the end of the final property.
-	:param indent_closing_brace:
-	:param minify: Minify the CSS. Overrides all other options.
+	:param styles:
+
+	:return: The style sheet as a dictionary.
 	"""
 
-	def __init__(
-			self,
-			*,
-			indent: str = TAB,
-			trailing_semicolon: bool = False,
-			indent_closing_brace: bool = False,
-			minify: bool = False,
-			):
-		super().__init__()
-		self.indent = str(indent)
-		self.trailing_semicolon = trailing_semicolon
-		self.indent_closing_brace = indent_closing_brace
-		self.minify = minify
+	parser = css_parser.CSSParser(validate=False)
+	stylesheet: css_parser.css.CSSStyleSheet = parser.parseString(styles)
 
-	def reset_style(self) -> None:
-		"""
-		Reset the serializer to its default style.
-		"""
+	styles_dict: MutableMapping[str, MutableMapping[str, Any]] = {}
 
-		# Reset CSS Parser to defaults
-		self.prefs.useDefaults()
+	def parse_style(style: css_parser.css.CSSStyleDeclaration) -> MutableMapping[str, Property]:
+		style_dict: Dict[str, Property] = {}
 
-		if self.minify:
-			self.prefs.useMinified()
+		prop: css_parser.css.Property
+		for prop in style.children():
+			if prop.priority:
+				style_dict[prop.name] = (prop.value, prop.priority)
+			else:
+				style_dict[prop.name] = prop.value
+
+		return style_dict
+
+	rule: css_parser.css.CSSRule
+	for rule in stylesheet.cssRules:
+		if isinstance(rule, css_parser.css.CSSStyleRule):
+			styles_dict[rule.selectorText] = parse_style(rule.style)
+
+		elif isinstance(rule, css_parser.css.CSSMediaRule):
+			styles_dict[f"@media {rule.media.mediaText}"] = {}
+
+			for child in rule.cssRules:
+				styles_dict[f"@media {rule.media.mediaText}"][child.selectorText] = parse_style(child.style)
 
 		else:
-			# Formatting preferences
-			self.prefs.omitLastSemicolon = not self.trailing_semicolon
-			self.prefs.indentClosingBrace = self.indent_closing_brace
-			self.prefs.indent = self.indent
+			raise NotImplementedError(rule)
 
-	@contextmanager
-	def use(self) -> Iterator:
-		"""
-		Contextmanager to use this serializer for the scope of the ``with`` block.
-		"""
+	return styles_dict
 
-		# if css_parser.ser is self:
-		# 	yield
-		# 	return
-		#
-		current_serializer = css_parser.ser
-		self.reset_style()
 
-		try:
-			css_parser.ser = self
-			yield
+def load(fp: Union[PathLike, IO]) -> MutableMapping[str, MutableMapping[str, Any]]:
+	r"""
+	Parse a cascading style sheet from the given file and return its dictionary representation.
 
-		finally:
-			css_parser.ser = current_serializer
+	.. versionadded:: 0.2.0
+
+	:param fp: An open file handle, or the filename of a file to write to.
+
+	:return: The style sheet as a dictionary.
+	"""
+
+	if isinstance(fp, TextIOBase):
+		styles = fp.read()
+	else:
+		styles = PathPlus(fp).read_text()
+
+	return loads(styles)
 
 
 class StyleSheet(css_parser.css.CSSStyleSheet):
@@ -229,6 +332,27 @@ class StyleSheet(css_parser.css.CSSStyleSheet):
 
 		self.add(make_style(selector, styles))
 
+	def add_media_styles(
+			self,
+			media_query: str,
+			styles: Mapping[str, Style],
+			) -> None:
+		"""
+		Add a set of styles for a media query to the style sheet.
+
+		.. versionadded:: 0.2.0
+
+		:param media_query:
+		:param styles:
+		"""
+
+		media = css_parser.css.CSSMediaRule(media_query)
+
+		for selector, style in styles.items():
+			media.add(make_style(selector, style))
+
+		self.add(media)
+
 	def tostring(self) -> str:
 		"""
 		Returns the style sheet as a string.
@@ -257,33 +381,3 @@ def make_style(selector: str, styles: Style) -> css_parser.css.CSSStyleRule:
 			style[name] = str(properties)
 
 	return css_parser.css.CSSStyleRule(selectorText=selector, style=style)
-
-
-def px(val: Union[int, float, str]) -> str:
-	"""
-	Helper function to format a number as a value in pixels.
-
-	:param val:
-	"""
-
-	return f"{val}px"
-
-
-def em(val: Union[int, float, str]) -> str:
-	"""
-	Helper function to format a number as a value in em.
-
-	:param val:
-	"""
-
-	return f"{val}em"
-
-
-def rem(val: Union[int, float, str]) -> str:
-	"""
-	Helper function to format a number as a value in rem.
-
-	:param val:
-	"""
-
-	return f"{val}rem"

@@ -146,6 +146,7 @@ Installation
 	:caption: API Reference
 	:glob:
 
+	api/dict2css
 	api/*
 
 .. toctree::

@@ -1,0 +1,19 @@
+.wy-nav-content {
+	max-width: 1200rem !important;
+}
+
+li p:last-child {
+	margin-bottom: 12em !important;
+	margin-top: 6em;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+@media screen and (min-width: 870px) {
+	li p:last-child {
+		max-width: 1200rem !important;
+	}
+
+}
