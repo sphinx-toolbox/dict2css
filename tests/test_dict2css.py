@@ -189,3 +189,6 @@ def test_loads(data_regression: DataRegressionFixture, tmp_pathplus: PathPlus):
 	style_file = tmp_pathplus / "style.css"
 	dump(stylesheet, style_file)
 	assert load(style_file) == stylesheet
+
+	with style_file.open() as fp:
+		assert load(fp) == stylesheet
