@@ -45,7 +45,7 @@ from dict2css.serializer import CSSSerializer
 __author__: str = "Dominic Davis-Foster"
 __copyright__: str = "2020-2021 Dominic Davis-Foster"
 __license__: str = "MIT License"
-__version__: str = "0.2.0"
+__version__: str = "0.2.1"
 __email__: str = "dominic@davis-foster.co.uk"
 
 __all__ = [
@@ -132,7 +132,7 @@ def dumps(
 
 	:return: The style sheet as a string.
 
-	.. versionchanged:: 0.2.0  Added support for media at-rules.
+	.. versionchanged:: 0.2.1  Added support for media at-rules.
 	"""
 
 	serializer = CSSSerializer(
@@ -214,12 +214,12 @@ def dump(
 	:param indent_closing_brace:
 	:param minify: Minify the CSS. Overrides all other options.
 
-	.. versionchanged:: 0.2.0
+	.. versionchanged:: 0.2.1
 
 		`fp` now accepts :py:obj:`domdf_python_tools.typing.PathLike` objects,
 		representing the path of a file to write to.
 
-	.. versionchanged:: 0.2.0  Added support for media at-rules.
+	.. versionchanged:: 0.2.1  Added support for media at-rules.
 	"""
 
 	css = dumps(
@@ -240,7 +240,7 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 	r"""
 	Parse a cascading style sheet and return its dictionary representation.
 
-	.. versionadded:: 0.2.0
+	.. versionadded:: 0.2.1
 
 	:param styles:
 
@@ -285,7 +285,7 @@ def load(fp: Union[PathLike, IO]) -> MutableMapping[str, MutableMapping[str, Any
 	r"""
 	Parse a cascading style sheet from the given file and return its dictionary representation.
 
-	.. versionadded:: 0.2.0
+	.. versionadded:: 0.2.1
 
 	:param fp: An open file handle, or the filename of a file to write to.
 
@@ -340,7 +340,7 @@ class StyleSheet(css_parser.css.CSSStyleSheet):
 		"""
 		Add a set of styles for a media query to the style sheet.
 
-		.. versionadded:: 0.2.0
+		.. versionadded:: 0.2.1
 
 		:param media_query:
 		:param styles:
