@@ -29,8 +29,8 @@ Serializer for cascading style sheets.
 #
 
 # stdlib
-from collections import Iterator
 from contextlib import contextmanager
+from typing import Iterator
 
 # 3rd party
 import css_parser  # type: ignore
