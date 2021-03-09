@@ -11,6 +11,10 @@ version: '0.2.1'
 license: 'MIT'
 short_desc: 'A μ-library for constructing cascading style sheets from Python dictionaries.'
 
+use_whey: true
+sphinx_html_theme: furo
+min_coverage: 100
+
 conda_channels:
   - conda-forge
 
