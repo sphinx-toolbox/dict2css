@@ -14,6 +14,7 @@ short_desc: 'A μ-library for constructing cascading style sheets from Python di
 use_whey: true
 sphinx_html_theme: furo
 min_coverage: 100
+mypy_version: "0.812"
 
 conda_channels:
   - conda-forge
