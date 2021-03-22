@@ -33,5 +33,3 @@ python-versions = [ "3.6", "3.7", "3.8", "3.9",]
 python-implementations = [ "CPython", "PyPy",]
 platforms = [ "Windows", "macOS", "Linux",]
 license-key = "MIT"
-source-dir = "src"
-additional-files = [ "include src/dict2css/foo.css",]
