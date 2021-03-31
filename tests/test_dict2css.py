@@ -4,18 +4,18 @@ from typing import Dict, Mapping, MutableMapping
 # 3rd party
 import css_parser  # type: ignore
 import pytest
+from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
-from domdf_python_tools.testing import check_file_output, check_file_regression
 from domdf_python_tools.words import TAB
-from pytest_regressions.data_regression import DataRegressionFixture
-from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from dict2css import IMPORTANT, CSSSerializer, Style, StyleSheet, dump, dumps, em, load, loads, make_style, px, rem
+from dict2css import IMPORTANT, Style, StyleSheet, dump, dumps, load, loads, make_style
+from dict2css.helpers import em, px, rem
+from dict2css.serializer import CSSSerializer
 
 
-def test_stylesheet(file_regression: FileRegressionFixture):
+def test_stylesheet(advanced_file_regression: AdvancedFileRegressionFixture):
 	serializer = CSSSerializer(indent="  ", trailing_semicolon=True)
 
 	with serializer.use():
@@ -32,14 +32,14 @@ def test_stylesheet(file_regression: FileRegressionFixture):
 
 		stylesheet = sheet.tostring().replace('}', "}\n")
 
-		check_file_regression(stylesheet, file_regression, ".css")
+		advanced_file_regression.check(stylesheet, extension=".css")
 
 
 @pytest.mark.parametrize("trailing_semicolon", [True, False])
 @pytest.mark.parametrize("indent_closing_brace", [True, False])
 @pytest.mark.parametrize("indent", [TAB, "  ", "    "])
 def test_dumps(
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		trailing_semicolon: bool,
 		indent_closing_brace: bool,
 		indent: str,
@@ -60,7 +60,7 @@ def test_dumps(
 			trailing_semicolon=trailing_semicolon,
 			indent_closing_brace=indent_closing_brace
 			)
-	check_file_regression(css, file_regression, ".css")
+	advanced_file_regression.check(css, extension=".css")
 
 	output_file = tmp_pathplus / "style.css"
 
@@ -73,7 +73,7 @@ def test_dumps(
 				indent_closing_brace=indent_closing_brace
 				)
 
-	check_file_output(output_file, file_regression)
+	advanced_file_regression.check_file(output_file)
 
 	dump(
 			stylesheet,
@@ -83,7 +83,7 @@ def test_dumps(
 			indent_closing_brace=indent_closing_brace
 			)
 
-	check_file_output(output_file, file_regression)
+	advanced_file_regression.check_file(output_file)
 
 
 def test_make_style():
@@ -105,7 +105,7 @@ def test_make_style():
 				]
 
 
-def test_dump_minify(file_regression: FileRegressionFixture, tmp_pathplus: PathPlus):
+def test_dump_minify(advanced_file_regression: AdvancedFileRegressionFixture, tmp_pathplus: PathPlus):
 	stylesheet: Dict[str, Style] = {
 			".wy-nav-content": {"max-width": (rem(1200), IMPORTANT)},
 			"li p:last-child": {
@@ -116,20 +116,20 @@ def test_dump_minify(file_regression: FileRegressionFixture, tmp_pathplus: PathP
 			}
 
 	css = dumps(stylesheet, minify=True)
-	check_file_regression(css, file_regression, ".css")
+	advanced_file_regression.check(css, extension=".css")
 
 	output_file = tmp_pathplus / "style.css"
 
 	with output_file.open('w') as fp:
 		dump(stylesheet, fp, minify=True)
 
-	check_file_output(output_file, file_regression)
+	advanced_file_regression.check_file(output_file)
 
 	dump(stylesheet, output_file, minify=True)
-	check_file_output(output_file, file_regression)
+	advanced_file_regression.check_file(output_file)
 
 
-def test_dumps_media(file_regression: FileRegressionFixture, tmp_pathplus: PathPlus):
+def test_dumps_media(advanced_file_regression: AdvancedFileRegressionFixture, tmp_pathplus: PathPlus):
 	stylesheet: Dict[str, MutableMapping] = {
 			".wy-nav-content": {"max-width": (rem(1200), IMPORTANT)},
 			"li p:last-child": {
@@ -141,20 +141,20 @@ def test_dumps_media(file_regression: FileRegressionFixture, tmp_pathplus: PathP
 			}
 
 	css = dumps(stylesheet, trailing_semicolon=True)
-	check_file_regression(css, file_regression, ".css")
+	advanced_file_regression.check(css, extension=".css")
 
 	output_file = tmp_pathplus / "style.css"
 
 	with output_file.open('w') as fp:
 		dump(stylesheet, fp, trailing_semicolon=True)
 
-	check_file_output(output_file, file_regression)
+	advanced_file_regression.check_file(output_file)
 
 	dump(stylesheet, output_file, trailing_semicolon=True)
-	check_file_output(output_file, file_regression)
+	advanced_file_regression.check_file(output_file)
 
 
-def test_loads(data_regression: DataRegressionFixture, tmp_pathplus: PathPlus):
+def test_loads(advanced_data_regression: AdvancedDataRegressionFixture, tmp_pathplus: PathPlus):
 	style = [
 			".wy-nav-content {",
 			"    max-width: 1200rem !important;",
@@ -172,7 +172,7 @@ def test_loads(data_regression: DataRegressionFixture, tmp_pathplus: PathPlus):
 			'}',
 			]
 
-	data_regression.check(loads('\n'.join(style)))
+	advanced_data_regression.check(loads('\n'.join(style)))
 
 	stylesheet: Mapping[str, Mapping] = {
 			".wy-nav-content": {"max-width": (rem(1200), IMPORTANT)},
