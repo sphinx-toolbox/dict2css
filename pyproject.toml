@@ -9,9 +9,11 @@ description = "A μ-library for constructing cascading style sheets from Python 
 readme = "README.rst"
 keywords = [ "css",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
+
 [[project.authors]]
 email = "dominic@davis-foster.co.uk"
 name = "Dominic Davis-Foster"
+
 
 [project.license]
 file = "LICENSE"
