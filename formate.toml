@@ -38,6 +38,7 @@ known_third_party = [
     "css_parser",
     "domdf_python_tools",
     "github",
+    "importlib_metadata",
     "pytest",
     "pytest_cov",
     "pytest_randomly",
