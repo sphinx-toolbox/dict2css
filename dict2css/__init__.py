@@ -103,7 +103,7 @@ def dumps(
 			max-width: 1200px !important
 		}
 
-	See the :py:obj:`~.Styles` object for more information on the layout.
+	See the :py:obj:`~.Style` object for more information on the layout.
 
 	The keys can also be media at-rules, with the values mappings of property names to their values:
 
@@ -186,7 +186,7 @@ def dump(
 			max-width: 1200px !important
 		}
 
-	See the :py:obj:`~.Styles` object for more information on the layout.
+	See the :py:obj:`~.Style` object for more information on the layout.
 
 	The keys can also be media at-rules, with the values mappings of property names to their values:
 
