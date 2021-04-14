@@ -123,11 +123,11 @@ dict2css
 .. end shields
 
 ``dict2css`` provides an API similar to the :mod:`json` and
-toml_ modules, with ``dump`` and ``load`` functions.
-The ``dump`` function takes a mapping of `CSS selectors`_
+toml_ modules, with :func:`~.dump` and :func:`~.load` functions.
+The :func:`~.dump` function takes a mapping of `CSS selectors`_
 to mappings of CSS properties.
 Each property value may, optionally, be a two-element tuple containing the value and the string "important".
-The ``load`` function returns a mapping with the same structure.
+The :func:`~.load` function returns a mapping with the same structure.
 
 .. _json: https://docs.python.org/3/library/json.html
 .. _toml: https://github.com/uiri/toml/
