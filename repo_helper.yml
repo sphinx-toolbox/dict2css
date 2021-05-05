@@ -38,3 +38,12 @@ classifiers:
 
 sphinx_conf_epilogue:
  - nitpicky = True
+
+exclude_files:
+ - contributing
+
+preserve_custom_theme: true
+
+extra_sphinx_extensions:
+ - html_section
+ - latex_mu

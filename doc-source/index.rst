@@ -147,6 +147,11 @@ Installation
 
 .. end installation
 
+Contents
+-----------
+
+.. html-section::
+
 .. toctree::
 	:hidden:
 
@@ -154,17 +159,10 @@ Installation
 
 .. toctree::
 	:maxdepth: 3
-	:caption: API Reference
 	:glob:
 
 	api/dict2css
 	api/*
-
-.. toctree::
-	:maxdepth: 3
-	:caption: Contributing
-
-	contributing
 	Source
 
 .. start links
