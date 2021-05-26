@@ -49,6 +49,9 @@ class CSSSerializer(css_parser.CSSSerializer):
 	:param trailing_semicolon:  Whether to add a semicolon to the end of the final property.
 	:param indent_closing_brace:
 	:param minify: Minify the CSS. Overrides all other options.
+
+	.. autosummary-widths:: 5/16
+		:html: 2/10
 	"""
 
 	def __init__(

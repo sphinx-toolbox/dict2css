@@ -5,6 +5,7 @@ dict2css
 .. start short_desc
 
 .. documentation-summary::
+	:meta:
 
 .. end short_desc
 
@@ -164,6 +165,13 @@ Contents
 	api/dict2css
 	api/*
 	Source
+
+.. sidebar-links::
+	:caption: Links
+	:github:
+	:pypi: dict2css
+
+	Contributing Guide <https://contributing-to-sphinx-toolbox.readthedocs.io/en/latest/>
 
 .. start links
 

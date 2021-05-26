@@ -38,6 +38,7 @@ classifiers:
 
 sphinx_conf_epilogue:
  - nitpicky = True
+ - latex_elements["preamble"] = "\\raggedbottom\n\\widowpenalty10000"
 
 exclude_files:
  - contributing
@@ -45,5 +46,8 @@ exclude_files:
 preserve_custom_theme: true
 
 extra_sphinx_extensions:
- - html_section
+ - sphinx_toolbox_experimental.html_section
+ - sphinx_toolbox_experimental.autosummary_widths
+ - sphinx_toolbox_experimental.succinct_seealso
  - latex_mu
+ - docs_needspace

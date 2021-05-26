@@ -4,6 +4,7 @@
 """
 A μ-library for constructing cascasing style sheets from Python dictionaries.
 
+.. latex:vspace:: 10px
 .. seealso:: `css-parser <https://github.com/ebook-utils/css-parser>`_, which this library builds upon.
 """
 #
@@ -49,18 +50,22 @@ __version__: str = "0.2.3"
 __email__: str = "dominic@davis-foster.co.uk"
 
 __all__ = [
+		"IMPORTANT",
+		"Style",
 		"dumps",
 		"dump",
-		"load",
 		"loads",
+		"load",
 		"StyleSheet",
 		"make_style",
-		"Style",
-		"IMPORTANT",
 		]
 
-#: The string ``'important'``.
 IMPORTANT = "important"
+"""
+The string ``'important'``.
+
+.. latex:vspace:: 10px
+"""
 
 # Property = Union[Tuple[Union[str, int, None], str], str, int, None]
 Property = Union[Sequence, str, int, None]
@@ -74,8 +79,8 @@ The keys are CSS properties.
 The values can be either:
 
 * A :class:`str`, :class:`float` or :py:obj:`None`, giving the value of the property.
-* A :class:`tuple` of the property's value (as above) and the priority,
-  such as :data:`~.IMPORTANT` which sets ``!important`` on the property.
+* A :class:`tuple` of the property's value (as above) and the priority
+  such as :data:`~.IMPORTANT` (which sets ``!important`` on the property).
 """
 
 
@@ -114,6 +119,7 @@ def dumps(
 				".wy-nav-content": {"max-width": (px(1200), IMPORTANT)},
 				},
 			}
+		print(dumps(styles))
 
 	.. code-block:: css
 
@@ -122,7 +128,6 @@ def dumps(
 				max-width: 1200px !important
 			}
 		}
-		print(dumps(styles))
 
 	:param styles: A mapping of CSS selectors to styles.
 	:param indent: The indent to use, such as a tab (``\t``), two spaces or four spaces.
@@ -173,7 +178,7 @@ def dump(
 		minify: bool = False,
 		) -> None:
 	r"""
-	Construct a cascading style sheet from a dictionary and write it to ``fp``.
+	Construct a style sheet from a dictionary and write it to ``fp``.
 
 	.. code-block:: python
 
@@ -187,6 +192,8 @@ def dump(
 		}
 
 	See the :py:obj:`~.Style` object for more information on the layout.
+
+	.. latex:clearpage::
 
 	The keys can also be media at-rules, with the values mappings of property names to their values:
 
@@ -238,7 +245,7 @@ def dump(
 
 def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 	r"""
-	Parse a cascading style sheet and return its dictionary representation.
+	Parse a style sheet and return its dictionary representation.
 
 	.. versionadded:: 0.2.3
 
@@ -301,8 +308,15 @@ def load(fp: Union[PathLike, IO]) -> MutableMapping[str, MutableMapping[str, Any
 
 
 class StyleSheet(css_parser.css.CSSStyleSheet):
-	"""
+	r"""
 	Represents a CSS style sheet.
+
+	.. raw:: latex
+
+		\nopagebreak
+
+	.. autosummary-widths:: 7/16
+
 	"""
 
 	def __init__(self):
