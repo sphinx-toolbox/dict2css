@@ -223,10 +223,9 @@ def dump(
 
 	.. versionchanged:: 0.2.3
 
-		`fp` now accepts :py:obj:`domdf_python_tools.typing.PathLike` objects,
-		representing the path of a file to write to.
-
-	.. versionchanged:: 0.2.3  Added support for media at-rules.
+		* `fp` now accepts :py:obj:`domdf_python_tools.typing.PathLike` objects,
+		  representing the path of a file to write to.
+		* Added support for media at-rules.
 	"""
 
 	css = dumps(
