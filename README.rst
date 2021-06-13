@@ -101,7 +101,7 @@ dict2css
 .. |language| image:: https://img.shields.io/github/languages/top/sphinx-toolbox/dict2css
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/sphinx-toolbox/dict2css/v0.2.3
+.. |commits-since| image:: https://img.shields.io/github/commits-since/sphinx-toolbox/dict2css/v0.2.4
 	:target: https://github.com/sphinx-toolbox/dict2css/pulse
 	:alt: GitHub commits since tagged version
 
