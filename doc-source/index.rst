@@ -164,6 +164,7 @@ Contents
 
 	api/dict2css
 	api/*
+	changelog
 	Source
 
 .. sidebar-links::

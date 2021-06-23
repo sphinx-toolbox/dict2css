@@ -79,3 +79,4 @@ def setup(app):
 
 nitpicky = True
 latex_elements["preamble"] = "\\raggedbottom\n\\widowpenalty10000"
+ignore_missing_xrefs = ["^css_parser\\."]

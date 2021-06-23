@@ -39,6 +39,7 @@ classifiers:
 sphinx_conf_epilogue:
  - nitpicky = True
  - latex_elements["preamble"] = "\\raggedbottom\n\\widowpenalty10000"
+ - ignore_missing_xrefs = ["^css_parser\\."]
 
 exclude_files:
  - contributing
@@ -49,5 +50,7 @@ extra_sphinx_extensions:
  - sphinx_toolbox_experimental.html_section
  - sphinx_toolbox_experimental.autosummary_widths
  - sphinx_toolbox_experimental.succinct_seealso
+ - sphinx_toolbox_experimental.needspace
+ - sphinx_toolbox_experimental.missing_xref
+ - sphinx_toolbox_experimental.changelog
  - latex_mu
- - docs_needspace
