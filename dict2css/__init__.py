@@ -137,7 +137,7 @@ def dumps(
 
 	:return: The style sheet as a string.
 
-	.. versionchanged:: 0.2.3  Added support for media at-rules.
+	.. versionchanged:: 0.2.0  Added support for media at-rules.
 	"""
 
 	serializer = CSSSerializer(
@@ -221,9 +221,9 @@ def dump(
 	:param indent_closing_brace:
 	:param minify: Minify the CSS. Overrides all other options.
 
-	.. versionchanged:: 0.2.3
+	.. versionchanged:: 0.2.0
 
-		* `fp` now accepts :py:obj:`domdf_python_tools.typing.PathLike` objects,
+		* ``fp`` now accepts :py:obj:`domdf_python_tools.typing.PathLike` objects,
 		  representing the path of a file to write to.
 		* Added support for media at-rules.
 	"""
@@ -246,7 +246,7 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 	r"""
 	Parse a style sheet and return its dictionary representation.
 
-	.. versionadded:: 0.2.3
+	.. versionadded:: 0.2.0
 
 	:param styles:
 
@@ -291,7 +291,7 @@ def load(fp: Union[PathLike, IO]) -> MutableMapping[str, MutableMapping[str, Any
 	r"""
 	Parse a cascading style sheet from the given file and return its dictionary representation.
 
-	.. versionadded:: 0.2.3
+	.. versionadded:: 0.2.0
 
 	:param fp: An open file handle, or the filename of a file to write to.
 
@@ -353,7 +353,7 @@ class StyleSheet(css_parser.css.CSSStyleSheet):
 		"""
 		Add a set of styles for a media query to the style sheet.
 
-		.. versionadded:: 0.2.3
+		.. versionadded:: 0.2.0
 
 		:param media_query:
 		:param styles:
