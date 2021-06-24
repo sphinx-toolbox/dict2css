@@ -165,7 +165,6 @@ Contents
 	api/dict2css
 	api/*
 	changelog
-	Source
 
 .. sidebar-links::
 	:caption: Links
@@ -173,6 +172,7 @@ Contents
 	:pypi: dict2css
 
 	Contributing Guide <https://contributing-to-sphinx-toolbox.readthedocs.io/en/latest/>
+	Source
 
 .. start links
 
