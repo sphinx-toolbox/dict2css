@@ -74,7 +74,6 @@ extensions = [
     "sphinx_toolbox_experimental.missing_xref",
     "sphinx_toolbox_experimental.changelog",
     "latex_mu",
-    "docs_needspace",
 ]
 sphinxemoji_style = "twemoji"
 gitstamp_fmt = "%d %b %Y"
