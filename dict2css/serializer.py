@@ -51,7 +51,6 @@ class CSSSerializer(css_parser.CSSSerializer):
 	:param minify: Minify the CSS. Overrides all other options.
 
 	.. autosummary-widths:: 5/16
-		:html: 2/10
 	"""
 
 	def __init__(
