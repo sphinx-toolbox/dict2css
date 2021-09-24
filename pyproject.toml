@@ -7,7 +7,7 @@ name = "dict2css"
 version = "0.2.4"
 description = "A μ-library for constructing cascading style sheets from Python dictionaries."
 readme = "README.rst"
-keywords = [ "css",]
+keywords = [ "css", "serialize",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 
 [[project.authors]]
