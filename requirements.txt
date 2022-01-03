@@ -1,2 +1,2 @@
-css-parser==1.0.6
+css-parser>=1.0.6
 domdf-python-tools>=2.2.0
