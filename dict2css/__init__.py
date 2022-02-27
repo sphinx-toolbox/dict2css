@@ -34,10 +34,15 @@ from io import TextIOBase
 from typing import IO, Any, Dict, Mapping, MutableMapping, Sequence, Union, cast
 
 # 3rd party
-import css_parser  # type: ignore
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.words import TAB
+
+try:
+	# 3rd party
+	import css_parser  # type: ignore
+except ImportError:  # pragma: no cover
+	import cssutils as css_parser  # type: ignore
 
 # this package
 from dict2css.helpers import em, px, rem

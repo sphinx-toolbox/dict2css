@@ -2,7 +2,7 @@
 from typing import Dict, Mapping, MutableMapping
 
 # 3rd party
-import css_parser  # type: ignore
+import cssutils  # type: ignore
 import pytest
 from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
@@ -87,7 +87,7 @@ def test_dumps(
 
 
 def test_make_style():
-	style: css_parser.css.CSSStyleRule = make_style("li p:last-child", {"max-width": (rem(1200), IMPORTANT)})
+	style: cssutils.css.CSSStyleRule = make_style("li p:last-child", {"max-width": (rem(1200), IMPORTANT)})
 	assert str(style.selectorText) == "li p:last-child"
 	assert StringList(style.cssText) == [
 			"li p:last-child {",

@@ -58,3 +58,6 @@ extra_sphinx_extensions:
  - sphinx_toolbox_experimental.missing_xref
  - sphinx_toolbox_experimental.changelog
  - latex_mu
+
+tox_unmanaged:
+ - testenv
