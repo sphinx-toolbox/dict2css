@@ -58,8 +58,8 @@ dict2css
 	:target: https://github.com/sphinx-toolbox/dict2css/actions?query=workflow%3A%22mypy%22
 	:alt: mypy status
 
-.. |requires| image:: https://dependency-dash.herokuapp.com/github/sphinx-toolbox/dict2css/badge.svg
-	:target: https://dependency-dash.herokuapp.com/github/sphinx-toolbox/dict2css/
+.. |requires| image:: https://dependency-dash.repo-helper.uk/github/sphinx-toolbox/dict2css/badge.svg
+	:target: https://dependency-dash.repo-helper.uk/github/sphinx-toolbox/dict2css/
 	:alt: Requirements Status
 
 .. |coveralls| image:: https://img.shields.io/coveralls/github/sphinx-toolbox/dict2css/master?logo=coveralls

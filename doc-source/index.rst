@@ -60,8 +60,8 @@ dict2css
 		:workflow: mypy
 		:alt: mypy status
 
-	.. |requires| image:: https://dependency-dash.herokuapp.com/github/sphinx-toolbox/dict2css/badge.svg
-		:target: https://dependency-dash.herokuapp.com/github/sphinx-toolbox/dict2css/
+	.. |requires| image:: https://dependency-dash.repo-helper.uk/github/sphinx-toolbox/dict2css/badge.svg
+		:target: https://dependency-dash.repo-helper.uk/github/sphinx-toolbox/dict2css/
 		:alt: Requirements Status
 
 	.. |coveralls| coveralls-shield::
