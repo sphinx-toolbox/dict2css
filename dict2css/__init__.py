@@ -45,7 +45,7 @@ except ImportError:  # pragma: no cover
 	import cssutils as css_parser  # type: ignore
 
 # this package
-from dict2css.helpers import em, px, rem
+from dict2css.helpers import em, px, rem  # noqa: F401
 from dict2css.serializer import CSSSerializer
 
 __author__: str = "Dominic Davis-Foster"
@@ -285,6 +285,10 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 
 			for child in rule.cssRules:
 				styles_dict[f"@media {rule.media.mediaText}"][child.selectorText] = parse_style(child.style)
+
+		elif isinstance(rule, (css_parser.css.CSSComment)):
+			# Ignore these classes
+			pass
 
 		else:
 			raise NotImplementedError(rule)
