@@ -286,7 +286,7 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 			for child in rule.cssRules:
 				styles_dict[f"@media {rule.media.mediaText}"][child.selectorText] = parse_style(child.style)
 
-		elif isinstance(rule, (css_parser.css.CSSComment)):
+		elif isinstance(rule, (css_parser.css.CSSComment)):  # pragma: no cover
 			# Ignore these classes
 			pass
 
