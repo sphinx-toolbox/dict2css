@@ -109,11 +109,11 @@ dict2css
 	:target: https://github.com/sphinx-toolbox/dict2css/commit/master
 	:alt: GitHub last commit
 
-.. |maintained| image:: https://img.shields.io/maintenance/yes/2025
+.. |maintained| image:: https://img.shields.io/maintenance/yes/2026
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/dict2css
-	:target: https://pypi.org/project/dict2css/
+	:target: https://pypistats.org/packages/dict2css
 	:alt: PyPI - Downloads
 
 .. end shields

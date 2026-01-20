@@ -43,7 +43,7 @@ def test_dumps(
 		trailing_semicolon: bool,
 		indent_closing_brace: bool,
 		indent: str,
-		tmp_pathplus: PathPlus
+		tmp_pathplus: PathPlus,
 		):
 	stylesheet: Dict[str, Style] = {
 			".wy-nav-content": {"max-width": (rem(1200), IMPORTANT)},
@@ -58,7 +58,7 @@ def test_dumps(
 			stylesheet,
 			indent=indent,
 			trailing_semicolon=trailing_semicolon,
-			indent_closing_brace=indent_closing_brace
+			indent_closing_brace=indent_closing_brace,
 			)
 	advanced_file_regression.check(css, extension=".css")
 
@@ -70,7 +70,7 @@ def test_dumps(
 				fp,
 				indent=indent,
 				trailing_semicolon=trailing_semicolon,
-				indent_closing_brace=indent_closing_brace
+				indent_closing_brace=indent_closing_brace,
 				)
 
 	advanced_file_regression.check_file(output_file)
@@ -80,7 +80,7 @@ def test_dumps(
 			output_file,
 			indent=indent,
 			trailing_semicolon=trailing_semicolon,
-			indent_closing_brace=indent_closing_brace
+			indent_closing_brace=indent_closing_brace,
 			)
 
 	advanced_file_regression.check_file(output_file)
