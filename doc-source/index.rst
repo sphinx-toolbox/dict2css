@@ -90,12 +90,12 @@ dict2css
 		:wheel:
 		:alt: PyPI - Wheel
 
-	.. |conda-version| image:: https://img.shields.io/conda/v/domdfcoding/dict2css?logo=anaconda
-		:target: https://anaconda.org/domdfcoding/dict2css
+	.. |conda-version| image:: https://img.shields.io/conda/v/conda-forge/dict2css?logo=anaconda
+		:target: https://anaconda.org/conda-forge/dict2css
 		:alt: Conda - Package Version
 
-	.. |conda-platform| image:: https://img.shields.io/conda/pn/domdfcoding/dict2css?label=conda%7Cplatform
-		:target: https://anaconda.org/domdfcoding/dict2css
+	.. |conda-platform| image:: https://img.shields.io/conda/pn/conda-forge/dict2css?label=conda%7Cplatform
+		:target: https://anaconda.org/conda-forge/dict2css
 		:alt: Conda - Platform
 
 	.. |license| github-shield::
@@ -145,7 +145,7 @@ Installation
 	:pypi:
 	:github:
 	:anaconda:
-	:conda-channels: conda-forge, domdfcoding
+	:conda-channels: conda-forge
 
 .. end installation
 

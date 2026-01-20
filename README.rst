@@ -86,12 +86,12 @@ dict2css
 	:target: https://pypi.org/project/dict2css/
 	:alt: PyPI - Wheel
 
-.. |conda-version| image:: https://img.shields.io/conda/v/domdfcoding/dict2css?logo=anaconda
-	:target: https://anaconda.org/domdfcoding/dict2css
+.. |conda-version| image:: https://img.shields.io/conda/v/conda-forge/dict2css?logo=anaconda
+	:target: https://anaconda.org/conda-forge/dict2css
 	:alt: Conda - Package Version
 
-.. |conda-platform| image:: https://img.shields.io/conda/pn/domdfcoding/dict2css?label=conda%7Cplatform
-	:target: https://anaconda.org/domdfcoding/dict2css
+.. |conda-platform| image:: https://img.shields.io/conda/pn/conda-forge/dict2css?label=conda%7Cplatform
+	:target: https://anaconda.org/conda-forge/dict2css
 	:alt: Conda - Platform
 
 .. |license| image:: https://img.shields.io/github/license/sphinx-toolbox/dict2css
@@ -147,17 +147,8 @@ To install with ``pip``:
 
 To install with ``conda``:
 
-	* First add the required channels
+.. code-block:: bash
 
-	.. code-block:: bash
-
-		$ conda config --add channels https://conda.anaconda.org/conda-forge
-		$ conda config --add channels https://conda.anaconda.org/domdfcoding
-
-	* Then install
-
-	.. code-block:: bash
-
-		$ conda install dict2css
+	$ conda install -c conda-forge dict2css
 
 .. end installation
