@@ -35,13 +35,6 @@ from typing import Iterator
 # 3rd party
 from domdf_python_tools.words import TAB
 
-try:
-	# 3rd party
-	import css_parser  # type: ignore
-except ImportError:  # pragma: no cover
-	# 3rd party
-	import cssutils as css_parser  # type: ignore
-
 __all__ = ["CSSSerializer"]
 
 

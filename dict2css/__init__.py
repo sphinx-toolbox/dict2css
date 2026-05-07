@@ -31,18 +31,14 @@ A μ-library for constructing cascasing style sheets from Python dictionaries.
 
 # stdlib
 from io import TextIOBase
-from typing import IO, Any, Dict, Mapping, MutableMapping, Sequence, Union, cast
+from typing import IO, Any, Dict, Iterable, List, Mapping, MutableMapping, Sequence, Union, cast
 
 # 3rd party
+import tinycss2
+import tinycss2.ast
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.words import TAB
-
-try:
-	# 3rd party
-	import css_parser  # type: ignore
-except ImportError:  # pragma: no cover
-	import cssutils as css_parser  # type: ignore
 
 # this package
 from dict2css.helpers import em, px, rem  # noqa: F401
@@ -258,42 +254,44 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 	:return: The style sheet as a dictionary.
 	"""
 
-	parser = css_parser.CSSParser(validate=False)
-	stylesheet: css_parser.css.CSSStyleSheet = parser.parseString(styles)
+	stylesheet = tinycss2.parse_blocks_contents(styles, skip_comments=True, skip_whitespace=True)
 
 	styles_dict: MutableMapping[str, MutableMapping[str, Any]] = {}
 
-	def parse_style(style: css_parser.css.CSSStyleDeclaration) -> MutableMapping[str, Property]:
+	def parse_style(style: List[tinycss2.ast.Node]) -> MutableMapping[str, Property]:
 		style_dict: Dict[str, Property] = {}
 
-		prop: css_parser.css.Property
-		for prop in style.children():
-			if prop.priority:
-				style_dict[prop.name] = (prop.value, prop.priority)
+		prop: Union[tinycss2.ast.ParseError, tinycss2.ast.Declaration]
+		for prop in tinycss2.parse_declaration_list(style, skip_comments=True, skip_whitespace=True):
+			if isinstance(prop, tinycss2.ast.ParseError):
+				raise ValueError(prop)
+
+			if prop.important:
+				style_dict[prop.name.strip()] = (_serialize(prop.value), IMPORTANT)
 			else:
-				style_dict[prop.name] = prop.value
+				style_dict[prop.name.strip()] = _serialize(prop.value)
 
 		return style_dict
 
-	rule: css_parser.css.CSSRule
-	for rule in stylesheet.cssRules:
-		if isinstance(rule, css_parser.css.CSSStyleRule):
-			styles_dict[rule.selectorText] = parse_style(rule.style)
+	rule: tinycss2.ast.Node
+	for rule in stylesheet:
+		if isinstance(rule, tinycss2.ast.QualifiedRule):
+			styles_dict[_serialize(rule.prelude)] = parse_style(rule.content)
 
-		elif isinstance(rule, css_parser.css.CSSMediaRule):
-			styles_dict[f"@media {rule.media.mediaText}"] = {}
+		elif isinstance(rule, tinycss2.ast.AtRule):
+			at_rule_styles = styles_dict[f"@{rule.at_keyword} {_serialize(rule.prelude)}"] = at_rule_styles
 
-			for child in rule.cssRules:
-				styles_dict[f"@media {rule.media.mediaText}"][child.selectorText] = parse_style(child.style)
-
-		elif isinstance(rule, (css_parser.css.CSSComment)):  # pragma: no cover
-			# Ignore these classes
-			pass
+			for child in tinycss2.parse_blocks_contents(rule.content, skip_comments=True, skip_whitespace=True):
+				at_rule_styles[_serialize(child.prelude)] = parse_style(child.content)
 
 		else:
 			raise NotImplementedError(rule)
 
 	return styles_dict
+
+
+def _serialize(nodes: Iterable[tinycss2.ast.Node]):
+	return tinycss2.serialize(nodes).strip()
 
 
 def load(fp: Union[PathLike, IO]) -> MutableMapping[str, MutableMapping[str, Any]]:

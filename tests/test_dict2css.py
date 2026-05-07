@@ -2,7 +2,6 @@
 from typing import Dict, Mapping, MutableMapping
 
 # 3rd party
-import cssutils  # type: ignore
 import pytest
 from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
