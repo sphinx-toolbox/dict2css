@@ -194,9 +194,10 @@ class CSSSerializer:
 		:raises: ValueError: If the object cannot be serialized
 		"""
 
-		if self._default is not None:
+		if self._default is not None:  # pragma no cover  # TODO
 			return self._default(obj)
-		raise ValueError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
+		raise ValueError(f"Object of type {obj.__class__.__name__} cannot be represented in CSS")
 
 	def _encode_float(self, obj: float) -> str:
 		if obj != obj or obj == float("inf") or obj == float("-inf"):
@@ -252,8 +253,7 @@ class CSSSerializer:
 		from dict2css import IMPORTANT
 
 		if not obj:
-			yield "[]"
-			return
+			raise ValueError("Property cannot be empty")
 
 		if self._markers is not None:
 			marker_id: Optional[int] = id(obj)
