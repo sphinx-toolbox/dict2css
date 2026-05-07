@@ -3,14 +3,14 @@
 	z-index: 999;
 }
 
-li p:last-child {
-	margin-bottom: 12em !important;
-	margin-top: 6em;
-	font-size: 14px;
-	line-height: 1.5;
-	font-weight: 800 !important;
-}
-
 html {
 	scroll-behavior: smooth;
+}
+
+li p:last-child {
+	font-size: 14px;
+	font-weight: 800 !important;
+	line-height: 1.5;
+	margin-bottom: 12em !important;
+	margin-top: 6em;
 }

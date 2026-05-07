@@ -100,9 +100,6 @@ def test_dumps(
 			"html": {"scroll-behavior": "smooth"},
 			}
 
-	# TODO
-	sort_keys = False
-
 	css = dumps(
 			stylesheet,
 			indent=indent,
@@ -122,6 +119,8 @@ def test_dumps(
 				indent=indent,
 				trailing_semicolon=trailing_semicolon,
 				indent_closing_brace=indent_closing_brace,
+				check_circular=check_circular,
+				sort_keys=sort_keys,
 				)
 
 	advanced_file_regression.check_file(output_file)
@@ -132,6 +131,8 @@ def test_dumps(
 			indent=indent,
 			trailing_semicolon=trailing_semicolon,
 			indent_closing_brace=indent_closing_brace,
+			check_circular=check_circular,
+			sort_keys=sort_keys,
 			)
 
 	advanced_file_regression.check_file(output_file)
