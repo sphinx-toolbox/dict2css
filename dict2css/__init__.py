@@ -31,11 +31,11 @@ A μ-library for constructing cascasing style sheets from Python dictionaries.
 
 # stdlib
 from io import TextIOBase
-from typing import IO, Any, Dict, Iterable, List, Mapping, MutableMapping, Sequence, Union, cast
+from typing import IO, Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Union
 
 # 3rd party
-import tinycss2
-import tinycss2.ast
+import tinycss2  # type: ignore[import-untyped]
+import tinycss2.ast  # type: ignore[import-untyped]
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.words import TAB
@@ -45,7 +45,7 @@ from dict2css.helpers import em, px, rem  # noqa: F401
 from dict2css.serializer import CSSSerializer
 
 __author__: str = "Dominic Davis-Foster"
-__copyright__: str = "2020-2021 Dominic Davis-Foster"
+__copyright__: str = "2020-2026 Dominic Davis-Foster"
 __license__: str = "MIT License"
 __version__: str = "0.4.0"
 __email__: str = "dominic@davis-foster.co.uk"
@@ -57,9 +57,9 @@ __all__ = [
 		"dump",
 		"loads",
 		"load",
-		"StyleSheet",
-		"make_style",
 		]
+
+# TODO: allow int indent like json.dumps etc.
 
 IMPORTANT = "important"
 """
@@ -73,7 +73,7 @@ Property = Union[Sequence, str, int, None]
 
 Style = Mapping[str, Property]
 """
-Type annotation representing a style for :func:`~.make_style` and :func:`~.dumps`.
+Type annotation representing a style for :func:`~.dumps` and :func:`~.dump`.
 
 The keys are CSS properties.
 
@@ -89,9 +89,11 @@ def dumps(
 		styles: Mapping[str, Union[Style, Mapping]],
 		*,
 		indent: str = TAB,
-		trailing_semicolon: bool = False,
+		trailing_semicolon: Optional[bool] = None,
 		indent_closing_brace: bool = False,
 		minify: bool = False,
+		sort_keys: bool = False,
+		check_circular: bool = True,
 		) -> str:
 	r"""
 	Construct a cascading style sheet from a dictionary.
@@ -135,6 +137,8 @@ def dumps(
 	:param trailing_semicolon:  Whether to add a semicolon to the end of the final property.
 	:param indent_closing_brace:
 	:param minify: Minify the CSS. Overrides all other options.
+	:param sort_keys: Sort dictionary keys alphabetically.
+	:param check_circular: Check for circular references.
 
 	:return: The style sheet as a string.
 
@@ -146,27 +150,11 @@ def dumps(
 			trailing_semicolon=trailing_semicolon,
 			indent_closing_brace=indent_closing_brace,
 			minify=minify,
+			sort_keys=sort_keys,
+			check_circular=check_circular,
 			)
 
-	stylesheet: str = ''
-
-	with serializer.use():
-		sheet = StyleSheet()
-
-		for selector, style in styles.items():
-			if selector.startswith("@media"):
-				sheet.add_media_styles(selector.split("@media")[1].strip(), cast(Mapping[str, Style], style))
-			elif selector.startswith('@'):
-				raise NotImplementedError("Only @media at-rules are supported at this time.")
-			else:
-				sheet.add_style(selector, cast(Style, style))
-
-		stylesheet = sheet.tostring()
-
-	if not serializer.minify:
-		stylesheet = stylesheet.replace('}', "}\n")
-
-	return stylesheet
+	return serializer.encode(styles)
 
 
 def dump(
@@ -174,9 +162,11 @@ def dump(
 		fp: Union[PathLike, IO],
 		*,
 		indent: str = TAB,
-		trailing_semicolon: bool = False,
+		trailing_semicolon: Optional[bool] = None,
 		indent_closing_brace: bool = False,
 		minify: bool = False,
+		sort_keys: bool = False,
+		check_circular: bool = True,
 		) -> None:
 	r"""
 	Construct a style sheet from a dictionary and write it to ``fp``.
@@ -221,6 +211,8 @@ def dump(
 	:param trailing_semicolon:  Whether to add a semicolon to the end of the final property.
 	:param indent_closing_brace:
 	:param minify: Minify the CSS. Overrides all other options.
+	:param sort_keys: Sort dictionary keys alphabetically.
+	:param check_circular: Check for circular references.
 
 	.. versionchanged:: 0.2.0
 
@@ -234,6 +226,8 @@ def dump(
 			indent=indent,
 			trailing_semicolon=trailing_semicolon,
 			indent_closing_brace=indent_closing_brace,
+			sort_keys=sort_keys,
+			check_circular=check_circular,
 			minify=minify,
 			)
 
@@ -279,7 +273,7 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 			styles_dict[_serialize(rule.prelude)] = parse_style(rule.content)
 
 		elif isinstance(rule, tinycss2.ast.AtRule):
-			at_rule_styles = styles_dict[f"@{rule.at_keyword} {_serialize(rule.prelude)}"] = at_rule_styles
+			at_rule_styles = styles_dict[f"@{rule.at_keyword} {_serialize(rule.prelude)}"]
 
 			for child in tinycss2.parse_blocks_contents(rule.content, skip_comments=True, skip_whitespace=True):
 				at_rule_styles[_serialize(child.prelude)] = parse_style(child.content)
@@ -290,7 +284,7 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 	return styles_dict
 
 
-def _serialize(nodes: Iterable[tinycss2.ast.Node]):
+def _serialize(nodes: Iterable[tinycss2.ast.Node]) -> str:
 	return tinycss2.serialize(nodes).strip()
 
 
@@ -311,93 +305,3 @@ def load(fp: Union[PathLike, IO]) -> MutableMapping[str, MutableMapping[str, Any
 		styles = PathPlus(fp).read_text()
 
 	return loads(styles)
-
-
-class StyleSheet(css_parser.css.CSSStyleSheet):
-	r"""
-	Represents a CSS style sheet.
-
-	.. raw:: latex
-
-		\nopagebreak
-
-	.. autosummary-widths:: 7/16
-
-	"""
-
-	def __init__(self):
-		super().__init__(validating=False)
-
-	def add(self, rule: css_parser.css.CSSRule) -> int:
-		"""
-		Add the ``rule`` to the style sheet.
-
-		:param rule:
-		:type rule: :class:`css_parser.css.CSSRule`
-		"""
-
-		return super().add(rule)
-
-	def add_style(
-			self,
-			selector: str,
-			styles: Style,
-			) -> None:
-		"""
-		Add a style to the style sheet.
-
-		:param selector:
-		:param styles:
-		"""
-
-		self.add(make_style(selector, styles))
-
-	def add_media_styles(
-			self,
-			media_query: str,
-			styles: Mapping[str, Style],
-			) -> None:
-		"""
-		Add a set of styles for a media query to the style sheet.
-
-		.. versionadded:: 0.2.0
-
-		:param media_query:
-		:param styles:
-		"""
-
-		media = css_parser.css.CSSMediaRule(media_query)
-
-		for selector, style in styles.items():
-			media.add(make_style(selector, style))
-
-		self.add(media)
-
-	def tostring(self) -> str:
-		"""
-		Returns the style sheet as a string.
-		"""
-
-		return self.cssText.decode("UTF-8")
-
-
-def make_style(selector: str, styles: Style) -> css_parser.css.CSSStyleRule:
-	"""
-	Create a CSS Style Rule from a dictionary.
-
-	:param selector:
-	:param styles:
-
-	:rtype: :class:`css_parser.css.CSSStyleRule`
-	"""
-
-	style = css_parser.css.CSSStyleDeclaration()
-	style.validating = False
-
-	for name, properties in styles.items():
-		if isinstance(properties, Sequence) and not isinstance(properties, str):
-			style[name] = tuple(str(x) for x in properties)
-		else:
-			style[name] = str(properties)
-
-	return css_parser.css.CSSStyleRule(selectorText=selector, style=style)

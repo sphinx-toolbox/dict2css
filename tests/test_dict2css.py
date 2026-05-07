@@ -5,33 +5,11 @@ from typing import Dict, Mapping, MutableMapping
 import pytest
 from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
-from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.words import TAB
 
 # this package
-from dict2css import IMPORTANT, Style, StyleSheet, dump, dumps, load, loads, make_style
-from dict2css.helpers import em, px, rem
-from dict2css.serializer import CSSSerializer
-
-
-def test_stylesheet(advanced_file_regression: AdvancedFileRegressionFixture):
-	serializer = CSSSerializer(indent="  ", trailing_semicolon=True)
-
-	with serializer.use():
-		sheet = StyleSheet()
-
-		# Body width
-		sheet.add_style(".wy-nav-content", {"max-width": (px(1200), IMPORTANT)})
-
-		# Spacing between list items
-		sheet.add_style("li p:last-child", {"margin-bottom": (px(12), IMPORTANT)})
-
-		# Smooth scrolling between sections
-		sheet.add_style("html", {"scroll-behavior": "smooth"})
-
-		stylesheet = sheet.tostring().replace('}', "}\n")
-
-		advanced_file_regression.check(stylesheet, extension=".css")
+from dict2css import IMPORTANT, Style, dump, dumps, load, loads
+from dict2css.helpers import em, rem
 
 
 @pytest.mark.parametrize("trailing_semicolon", [True, False])
@@ -83,25 +61,6 @@ def test_dumps(
 			)
 
 	advanced_file_regression.check_file(output_file)
-
-
-def test_make_style():
-	style: cssutils.css.CSSStyleRule = make_style("li p:last-child", {"max-width": (rem(1200), IMPORTANT)})
-	assert str(style.selectorText) == "li p:last-child"
-	assert StringList(style.cssText) == [
-			"li p:last-child {",
-			"    max-width: 1200rem !important",
-			"    }",
-			]
-
-	serializer = CSSSerializer(trailing_semicolon=True)
-
-	with serializer.use():
-		assert StringList(style.cssText) == [
-				"li p:last-child {",
-				"\tmax-width: 1200rem !important;",
-				'}',
-				]
 
 
 def test_dump_minify(advanced_file_regression: AdvancedFileRegressionFixture, tmp_pathplus: PathPlus):
