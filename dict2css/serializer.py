@@ -148,7 +148,8 @@ class CSSSerializer:
 
 		self._minify = minify
 
-	def reset_style(self) -> None:
+	# TODO: deprecate
+	def reset_style(self) -> None:  # pragma: no cover
 		"""
 		Reset the serializer to its default style.
 		"""
@@ -207,7 +208,7 @@ class CSSSerializer:
 
 	def _encode_str(self, obj: str) -> str:
 
-		def replace_unicode(match: re.Match) -> str:
+		def replace_unicode(match: re.Match) -> str:  # pragma: no cover  # TODO
 			return ESCAPE_DCT[match.group(0)]
 
 		return ESCAPE.sub(replace_unicode, obj)
@@ -223,14 +224,14 @@ class CSSSerializer:
 			yield repr(obj)
 		elif isinstance(obj, float):
 			yield self._encode_float(obj)
-		elif isinstance(obj, (list, tuple)):
+		elif isinstance(obj, (list, tuple)):  # pragma: no cover  # TODO (needs default exposed)
 			yield from self._iterencode_list(obj, indent_level)
-		elif isinstance(obj, dict):
+		elif isinstance(obj, dict):  # pragma: no cover  # TODO (needs default exposed)
 			yield from self._iterencode_dict(obj, indent_level)
 		else:
 			if self._markers is not None:
 				marker_id: Optional[int] = id(obj)
-				if marker_id in self._markers:
+				if marker_id in self._markers:  # pragma: no cover  # TODO (super edge case)
 					raise ValueError("Circular reference detected")
 				assert marker_id is not None
 				self._markers[marker_id] = obj
@@ -238,9 +239,9 @@ class CSSSerializer:
 				marker_id = None
 
 			obj_user = self.default(obj)
-			yield from self._iterencode(obj_user, indent_level)
+			yield from self._iterencode(obj_user, indent_level)  # pragma: no cover  # TODO (needs default exposed)
 
-			if self._markers is not None and marker_id is not None:
+			if self._markers is not None and marker_id is not None:  # pragma: no cover  # TODO (needs default exposed)
 				del self._markers[marker_id]
 
 	def _iterencode_list(
@@ -257,7 +258,7 @@ class CSSSerializer:
 
 		if self._markers is not None:
 			marker_id: Optional[int] = id(obj)
-			if marker_id in self._markers:
+			if marker_id in self._markers:  # pragma: no cover  # TODO (super edge case)
 				raise ValueError("Circular reference detected")
 			assert marker_id is not None
 			self._markers[marker_id] = obj
@@ -272,11 +273,7 @@ class CSSSerializer:
 			else:
 				yield ' '
 
-			if isinstance(value, (list, tuple)):
-				yield from self._iterencode_list(value, indent_level)
-			elif isinstance(value, dict):
-				yield from self._iterencode_dict(value, indent_level)
-			elif value == IMPORTANT:
+			if value == IMPORTANT:
 				yield "!important"
 			else:
 				yield from self._iterencode(value, indent_level)
@@ -290,7 +287,9 @@ class CSSSerializer:
 			indent_level: int,
 			) -> Iterable[str]:
 		if not obj:
-			yield "{}"
+			if indent_level >= 0:
+				yield "{}"
+
 			return
 
 		if self._markers is not None:
@@ -331,7 +330,7 @@ class CSSSerializer:
 		total_items: int = len(items)
 		for idx, (key, value) in enumerate(items):
 			if not isinstance(key, str):
-				raise ValueError(f"keys must be strings, not {key.__class__.__name__}")
+				raise TypeError(f"keys must be strings, not {key.__class__.__name__}")
 
 			if first:
 				first = False
@@ -376,7 +375,7 @@ class CSSSerializer:
 
 	# TODO: deprecate
 	@contextmanager
-	def use(self) -> Iterator:
+	def use(self) -> Iterator:  # pragma: no cover
 		"""
 		No-op. Deprecated.
 		"""

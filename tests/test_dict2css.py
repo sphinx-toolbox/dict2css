@@ -46,12 +46,13 @@ def test_dumps_not_mapping():
 		dumps(None)
 
 
-def test_dumps_unknown_type():
+@boolean_option("check_circular", "check_circular")
+def test_dumps_unknown_type(check_circular: bool):
 	with pytest.raises(ValueError, match="Object of type .* cannot be represented in CSS"):
-		dumps({"the_key": None})
+		dumps({"the_key": None}, check_circular=check_circular)
 
 	with pytest.raises(ValueError, match="Object of type .* cannot be represented in CSS"):
-		dumps({"the_key": IPv4Address("127.0.0.1")})
+		dumps({"the_key": IPv4Address("127.0.0.1")}, check_circular=check_circular)
 
 
 def test_dumps_bad_floats():
@@ -223,3 +224,38 @@ def test_loads(advanced_data_regression: AdvancedDataRegressionFixture, tmp_path
 
 	with style_file.open() as fp:
 		assert load(fp) == stylesheet
+
+
+def test_loads_bad_syntax():
+	style = [
+			".wy-nav-content {",
+			"    max-width",
+			"    }",
+			]
+
+	with pytest.raises(ValueError, match="<ParseError invalid>"):
+		loads('\n'.join(style))
+
+
+def test_circular_references():
+	css = {
+			'a': {'b': 'c'},
+			}
+	css['d'] = css
+
+	with pytest.raises(ValueError, match="Circular reference detected"):
+		dumps(css)
+
+
+def test_edge_cases():
+	with pytest.raises(TypeError, match="keys must be strings, not"):
+		dumps({1234: {'a': 'b'}})
+	with pytest.raises(ValueError, match="Property cannot be empty"):
+		dumps({'a': {'b': ()}})
+
+	assert dumps({}) == ''
+	assert dumps({'a': {}}) == "a {}\n"
+	assert dumps({'a': {'b': True}}, indent='') == "a {b: true; }\n"
+	assert dumps({'a': {'b': False}}, indent='') == "a {b: false; }\n"
+
+	assert dumps({'a': {'b': ('c', ('d', ))}}) == 'a {\n\tb: c d;\n}\n'

@@ -154,7 +154,12 @@ def dumps(
 			check_circular=check_circular,
 			)
 
-	return serializer.encode(styles)
+	css = serializer.encode(styles).rstrip()
+
+	if css:
+		return css + '\n'
+	else:
+		return ''
 
 
 def dump(
