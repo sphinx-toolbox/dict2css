@@ -273,7 +273,7 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 			styles_dict[_serialize(rule.prelude)] = parse_style(rule.content)
 
 		elif isinstance(rule, tinycss2.ast.AtRule):
-			at_rule_styles = styles_dict[f"@{rule.at_keyword} {_serialize(rule.prelude)}"]
+			at_rule_styles = styles_dict[f"@{rule.at_keyword} {_serialize(rule.prelude)}"] = {}
 
 			for child in tinycss2.parse_blocks_contents(rule.content, skip_comments=True, skip_whitespace=True):
 				at_rule_styles[_serialize(child.prelude)] = parse_style(child.content)

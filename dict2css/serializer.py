@@ -123,7 +123,11 @@ class CSSSerializer:
 
 		self._sort_keys: bool = sort_keys
 		self._indent_str: Optional[str] = None if minify else indent
-		self._key_separator: str = ": "
+
+		if minify:
+			self._key_separator: str = ':'
+		else:
+			self._key_separator = ": "
 
 		if not indent and not minify:
 			self._item_separator: str = "; "
@@ -131,8 +135,7 @@ class CSSSerializer:
 			self._item_separator = ';'
 
 		if minify:
-			self._trailing_semicolon: bool = True
-			self._key_separator = ':'
+			self._trailing_semicolon = False
 		elif trailing_semicolon is None:
 			self._trailing_semicolon = indent is not None
 		else:
@@ -266,7 +269,7 @@ class CSSSerializer:
 			if first:
 				yield ''
 				first = False
-			elif not self._minify:
+			else:
 				yield ' '
 
 			if isinstance(value, (list, tuple)):
@@ -315,7 +318,9 @@ class CSSSerializer:
 			indent_level += 1
 			newline_indent = '\n' + self._indent_str * indent_level
 			assert newline_indent is not None
-			yield newline_indent
+
+			if indent_level > 0:
+				yield newline_indent
 
 		first = True
 		if self._sort_keys:
@@ -359,9 +364,12 @@ class CSSSerializer:
 		if indent_level >= 0:
 			if self._indent_closing_brace:
 				assert self._indent_str is not None
-				yield self._indent_str + '}'
-			else:
-				yield '}'
+				yield self._indent_str
+
+			yield '}'
+
+			if not self._minify:
+				yield '\n'
 
 		if self._markers is not None and marker_id is not None:
 			del self._markers[marker_id]
