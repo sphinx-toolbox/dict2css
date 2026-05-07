@@ -69,7 +69,7 @@ The string ``'important'``.
 """
 
 # Property = Union[Tuple[Union[str, int, None], str], str, int, None]
-Property = Union[Sequence, str, int, None]
+Property = Union[Sequence, str, int, float, None]
 
 Style = Mapping[str, Property]
 """

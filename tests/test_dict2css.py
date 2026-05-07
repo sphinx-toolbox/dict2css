@@ -1,6 +1,6 @@
 # stdlib
 from ipaddress import IPv4Address
-from typing import Dict, Mapping, MutableMapping
+from typing import Dict, Mapping, MutableMapping, no_type_check
 
 # 3rd party
 import pytest
@@ -23,6 +23,7 @@ def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=
 			)
 
 
+@no_type_check
 def test_dumps_not_mapping():
 	with pytest.raises(TypeError, match="Cannot convert .* to CSS"):
 		dumps([1, 2, 3])
@@ -46,6 +47,7 @@ def test_dumps_not_mapping():
 		dumps(None)
 
 
+@no_type_check
 @boolean_option("check_circular", "check_circular")
 def test_dumps_unknown_type(check_circular: bool):
 	with pytest.raises(ValueError, match="Object of type .* cannot be represented in CSS"):
@@ -55,6 +57,7 @@ def test_dumps_unknown_type(check_circular: bool):
 		dumps({"the_key": IPv4Address("127.0.0.1")}, check_circular=check_circular)
 
 
+@no_type_check
 def test_dumps_bad_floats():
 	with pytest.raises(ValueError, match="Out of range float values are not allowed:"):
 		dumps({"the_key": float("inf")})
@@ -238,6 +241,7 @@ def test_loads_bad_syntax():
 		loads('\n'.join(style))
 
 
+@no_type_check
 def test_circular_references():
 	css = {
 			'a': {'b': 'c'},
@@ -250,7 +254,8 @@ def test_circular_references():
 
 def test_edge_cases():
 	with pytest.raises(TypeError, match="keys must be strings, not"):
-		dumps({1234: {'a': 'b'}})
+		dumps({1234: {'a': 'b'}})  # type: ignore[dict-item]
+
 	with pytest.raises(ValueError, match="Property cannot be empty"):
 		dumps({'a': {'b': ()}})
 
