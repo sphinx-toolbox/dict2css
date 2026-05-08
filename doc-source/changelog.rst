@@ -6,7 +6,10 @@ Changelog
 0.5.0
 -------
 
-Drop support for Python 3.7
+* Drop support for Python 3.7
+* Reimplement ``load(s)`` using ``tinycss2`` and ``dump(s)`` using a modified version of ``ujson5``
+
+.. changelog:: 0.5.0
 
 
 0.4.0
