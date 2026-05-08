@@ -19,14 +19,12 @@ on_conda_forge: true
 enable_conda: false
 
 python_versions:
-  - 3.7
   - 3.8
   - 3.9
   - "3.10"
   - "3.11"
   - "3.12"
-  - 3.13-dev
-  - pypy37
+  - "3.13"
   - pypy38
   - pypy39
 
