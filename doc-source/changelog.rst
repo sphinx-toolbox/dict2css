@@ -8,6 +8,7 @@ Changelog
 
 * Drop support for Python 3.7
 * Reimplement ``load(s)`` using ``tinycss2`` and ``dump(s)`` using a modified version of ``ujson5``
+* Remove ``StyleSheet`` and ``make_style``
 
 .. changelog:: 0.5.0
 
