@@ -42,7 +42,7 @@ from domdf_python_tools.words import TAB
 __all__ = ["CSSSerializer"]
 
 #: Python objects that can be serialized to CSS
-Serializable = Union[dict, list, tuple, int, float, str, bool]
+Serializable = Union[dict, list, tuple, int, float, str, bool, None]
 
 #: A callable that takes in an object that is not serializable and returns a serializable object
 DefaultInterface = Union[
@@ -220,6 +220,8 @@ class CSSSerializer:
 			yield "true"
 		elif obj is False:
 			yield "false"
+		elif obj is None:
+			yield "none"
 		elif isinstance(obj, int):
 			yield repr(obj)
 		elif isinstance(obj, float):

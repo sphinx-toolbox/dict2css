@@ -51,9 +51,6 @@ def test_dumps_not_mapping():
 @boolean_option("check_circular", "check_circular")
 def test_dumps_unknown_type(check_circular: bool):
 	with pytest.raises(ValueError, match="Object of type .* cannot be represented in CSS"):
-		dumps({"the_key": None}, check_circular=check_circular)
-
-	with pytest.raises(ValueError, match="Object of type .* cannot be represented in CSS"):
 		dumps({"the_key": IPv4Address("127.0.0.1")}, check_circular=check_circular)
 
 
@@ -143,7 +140,7 @@ def test_dumps(
 
 def test_dump_minify(advanced_file_regression: AdvancedFileRegressionFixture, tmp_pathplus: PathPlus):
 	stylesheet: Dict[str, Style] = {
-			".wy-nav-content": {"max-width": (rem(1200), IMPORTANT)},
+			".wy-nav-content": {"max-width": (rem(1200), IMPORTANT), "box-shadow": None},
 			"li p:last-child": {
 					"margin-bottom": (em(12), IMPORTANT),
 					"margin-top": em(6),
