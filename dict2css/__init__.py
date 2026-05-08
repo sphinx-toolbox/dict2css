@@ -3,9 +3,6 @@
 #  __init__.py
 """
 A μ-library for constructing cascasing style sheets from Python dictionaries.
-
-.. latex:vspace:: 10px
-.. seealso:: `css-parser <https://github.com/ebook-utils/css-parser>`_, which this library builds upon.
 """
 #
 #  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -143,6 +140,7 @@ def dumps(
 	:return: The style sheet as a string.
 
 	.. versionchanged:: 0.2.0  Added support for media at-rules.
+	.. versionchanged:: 0.5.0  New implementation. Output may differ slightly from previous css-parser based one.
 	"""
 
 	serializer = CSSSerializer(
@@ -224,6 +222,8 @@ def dump(
 		* ``fp`` now accepts :py:obj:`domdf_python_tools.typing.PathLike` objects,
 		  representing the path of a file to write to.
 		* Added support for media at-rules.
+
+	.. versionchanged:: 0.5.0  New implementation. Output may differ slightly from previous css-parser based one.
 	"""
 
 	css = dumps(
@@ -247,10 +247,13 @@ def loads(styles: str) -> MutableMapping[str, MutableMapping[str, Any]]:
 	Parse a style sheet and return its dictionary representation.
 
 	.. versionadded:: 0.2.0
+	.. versionchanged:: 0.5.0  New implementation. Output may differ slightly from previous css-parser based one.
 
 	:param styles:
 
 	:return: The style sheet as a dictionary.
+
+	.. latex:clearpage::
 	"""
 
 	stylesheet = tinycss2.parse_blocks_contents(styles, skip_comments=True, skip_whitespace=True)
@@ -298,6 +301,7 @@ def load(fp: Union[PathLike, IO]) -> MutableMapping[str, MutableMapping[str, Any
 	Parse a cascading style sheet from the given file and return its dictionary representation.
 
 	.. versionadded:: 0.2.0
+	.. versionchanged:: 0.5.0  New implementation. Output may differ slightly from previous css-parser based one.
 
 	:param fp: An open file handle, or the filename of a file to write to.
 

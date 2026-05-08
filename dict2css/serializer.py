@@ -72,7 +72,7 @@ for i in range(0x20):
 
 class CSSSerializer:
 	r"""
-	Serializes a :class:`~.StyleSheet` and its parts.
+	Serializes a dictionary to CSS.
 
 	This controls the formatting of the style sheet.
 
@@ -83,7 +83,9 @@ class CSSSerializer:
 	:param sort_keys: Sort dictionary keys alphabetically.
 	:param check_circular: Check for circular references.
 
-	.. autosummary-widths:: 5/16
+	.. versionchanged:: 0.5.0  New implementation. Output may differ slightly from previous css-parser based one.
+
+	.. autosummary-widths:: 1/4
 	"""
 
 	def __init__(
@@ -160,9 +162,9 @@ class CSSSerializer:
 		"""
 		Return a CSS representation of a Python dictionary.
 
-		:param obj: The Python object to be serialized
+		:param obj: The Python dictionary to be serialized
 
-		:returns: The CSS string representation of the Python object
+		:returns: The CSS string representation of the Python dictionary
 		"""
 
 		return ''.join(self.iterencode(obj))
