@@ -43,7 +43,6 @@ sphinx_conf_epilogue:
  - nitpicky = True
  - latex_elements["preamble"] = "\\raggedbottom\n\\widowpenalty10000"
  - ignore_missing_xrefs = ["^css_parser\\."]
- - autosummary_widths_builders = ["latex"]
  - changelog_sections_numbered = False
 
 exclude_files:
@@ -51,7 +50,7 @@ exclude_files:
 
 
 extra_sphinx_extensions:
- - sphinx_toolbox_experimental.autosummary_widths
+ - sphinx_toolbox.more_autosummary.column_widths
  - sphinx_toolbox_experimental.succinct_seealso
  - sphinx_toolbox_experimental.needspace
  - sphinx_toolbox_experimental.missing_xref

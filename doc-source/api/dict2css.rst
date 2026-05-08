@@ -3,7 +3,6 @@
 ================
 
 .. autosummary-widths:: 21/64
-	:html: 41/128
 
 .. raw:: latex
 
