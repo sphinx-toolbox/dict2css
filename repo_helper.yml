@@ -40,7 +40,6 @@ classifiers:
 sphinx_conf_epilogue:
  - nitpicky = True
  - latex_elements["preamble"] = "\\raggedbottom\n\\widowpenalty10000"
- - ignore_missing_xrefs = ["^css_parser\\."]
  - changelog_sections_numbered = False
 
 exclude_files:
@@ -54,6 +53,3 @@ extra_sphinx_extensions:
  - sphinx_toolbox_experimental.missing_xref
  - sphinx_toolbox_experimental.changelog
  - latex_mu
-
-tox_unmanaged:
- - testenv

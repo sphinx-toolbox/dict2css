@@ -1,4 +1,2 @@
-# css-parser>=1.0.6
-# Later cssutils polluted by AI and the new licence-breaking chardet
-cssutils<=2.11.0,>=2.2.0
 domdf-python-tools>=2.2.0
+tinycss2>=1.2.1

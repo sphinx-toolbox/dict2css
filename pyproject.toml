@@ -139,9 +139,6 @@ reformat = true
 
 [tool.snippet-fmt.languages.json]
 
-[tool.dep_checker]
-allowed_unused = [ "cssutils",]
-
 [tool.dependency-dash."requirements.txt"]
 order = 10
 
