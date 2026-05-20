@@ -280,3 +280,14 @@ def test_for_sphinx_toolbox():
 	margin-bottom: 0
 }
 """
+
+	css_dict = {
+		"p.source-link": {
+			"font-family": '"SFMono-Regular", Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+			}
+		}
+
+	assert dumps(css_dict, trailing_semicolon=False) == """p.source-link {
+	font-family: "SFMono-Regular", Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace
+}
+"""

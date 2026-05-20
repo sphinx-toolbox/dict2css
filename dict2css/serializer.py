@@ -56,10 +56,9 @@ DefaultInterface = Union[
 	Callable[[Any], Serializable]
 	]
 
-ESCAPE = re.compile(r'[\x00-\x1f\\"\b\f\n\r\t]')
+ESCAPE = re.compile(r'[\x00-\x1f\\\b\f\n\r\t]')
 ESCAPE_DCT = {
 		'\\': "\\\\",
-		'"': '\\"',
 		'\x08': "\\b",
 		'\x0c': "\\f",
 		'\n': "\\n",
