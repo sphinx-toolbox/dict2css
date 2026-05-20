@@ -258,7 +258,14 @@ def test_edge_cases():
 
 	assert dumps({}) == ''
 	assert dumps({'a': {}}) == "a {}\n"
-	assert dumps({'a': {'b': True}}, indent='') == "a {b: true; }\n"
-	assert dumps({'a': {'b': False}}, indent='') == "a {b: false; }\n"
+	assert dumps({'a': {'b': True}}, indent='') == "a {b: true}\n"
+	assert dumps({'a': {'b': False}}, indent='') == "a {b: false}\n"
 
-	assert dumps({'a': {'b': ('c', ('d', ))}}) == 'a {\n\tb: c d;\n}\n'
+	assert dumps({'a': {'b': ('c', ('d', ))}}) == 'a {\n\tb: c d\n}\n'
+
+
+def test_for_sphinx_toolbox():
+	assert dumps({"p.source-link": {"margin-bottom": 0}}, trailing_semicolon=False) == """p.source-link {
+	margin-bottom: 0
+}
+"""
