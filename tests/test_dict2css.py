@@ -1,6 +1,6 @@
 # stdlib
 from ipaddress import IPv4Address
-from typing import Dict, Mapping, MutableMapping, no_type_check
+from typing import Dict, Mapping, MutableMapping, Optional, no_type_check
 
 # 3rd party
 import pytest
@@ -19,6 +19,17 @@ def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=
 			[
 					pytest.param(True, id=id),
 					pytest.param(False, id=f"not {id}"),
+					],
+			)
+
+
+def ternary_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=redefined-builtin
+	return pytest.mark.parametrize(
+			name,
+			[
+					pytest.param(True, id=id),
+					pytest.param(False, id=f"not {id}"),
+					pytest.param(None, id=f"unset {id}"),
 					],
 			)
 
@@ -68,7 +79,7 @@ def test_dumps_bad_floats():
 
 @boolean_option("check_circular", "check_circular")
 @boolean_option("sort_keys", "sort_keys")
-@boolean_option("trailing_semicolon", "trailing_semicolon")
+@ternary_option("trailing_semicolon", "trailing_semicolon")
 @boolean_option("indent_closing_brace", "indent_closing_brace")
 @pytest.mark.parametrize(
 		"indent",
@@ -81,7 +92,7 @@ def test_dumps_bad_floats():
 		)
 def test_dumps(
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		trailing_semicolon: bool,
+		trailing_semicolon: Optional[bool],
 		indent_closing_brace: bool,
 		indent: str,
 		check_circular: bool,
