@@ -124,7 +124,7 @@ class CSSSerializer:
 			) -> None:
 
 		self._sort_keys: bool = sort_keys
-		self._indent_str: Optional[str] = None if minify else indent
+		self._indent_str: str = (None if minify else indent) or ''
 
 		if minify:
 			self._key_separator: str = ':'
@@ -139,7 +139,7 @@ class CSSSerializer:
 		if minify:
 			self._trailing_semicolon = False
 		elif trailing_semicolon is None:
-			self._trailing_semicolon = indent is not None
+			self._trailing_semicolon = bool(self._indent_str)
 		else:
 			self._trailing_semicolon = trailing_semicolon
 
@@ -366,7 +366,6 @@ class CSSSerializer:
 
 		if indent_level >= 0:
 			if self._indent_closing_brace:
-				assert self._indent_str is not None
 				yield self._indent_str
 
 			yield '}'
