@@ -90,6 +90,13 @@ def test_dumps_bad_floats():
 				pytest.param('', id='0'),
 				],
 		)
+@pytest.mark.parametrize(
+		"none_style",
+		[
+				pytest.param("none", id="normal_none"),
+				pytest.param("None", id="cap_none"),
+				],
+		)
 def test_dumps(
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		trailing_semicolon: Optional[bool],
@@ -98,6 +105,7 @@ def test_dumps(
 		check_circular: bool,
 		sort_keys: bool,
 		tmp_pathplus: PathPlus,
+		none_style: str,
 		):
 	stylesheet: Dict[str, Style] = {
 			".wy-nav-content": {"max-width": (rem(1200), IMPORTANT), "z-index": 999},
@@ -118,6 +126,7 @@ def test_dumps(
 			indent_closing_brace=indent_closing_brace,
 			check_circular=check_circular,
 			sort_keys=sort_keys,
+			none_style=none_style,  # type: ignore[arg-type]
 			)
 	advanced_file_regression.check(css, extension=".css")
 

@@ -28,7 +28,7 @@ A μ-library for constructing cascasing style sheets from Python dictionaries.
 
 # stdlib
 from io import TextIOBase
-from typing import IO, Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Union
+from typing import IO, Any, Dict, Iterable, List, Literal, Mapping, MutableMapping, Optional, Sequence, Union
 
 # 3rd party
 import tinycss2  # type: ignore[import-untyped]
@@ -91,6 +91,7 @@ def dumps(
 		minify: bool = False,
 		sort_keys: bool = False,
 		check_circular: bool = True,
+		none_style: Union[Literal["none"], Literal["None"]] = "none",
 		) -> str:
 	r"""
 	Construct a cascading style sheet from a dictionary.
@@ -136,12 +137,14 @@ def dumps(
 	:param minify: Minify the CSS. Overrides all other options.
 	:param sort_keys: Sort dictionary keys alphabetically.
 	:param check_circular: Check for circular references.
+	:param none_style: Whether to represent :py:obj:`None` as ``None`` or ``none``.
 
 	:return: The style sheet as a string.
 
 	.. versionchanged:: 0.2.0  Added support for media at-rules.
 	.. versionchanged:: 0.5.0  New implementation. Output may differ slightly from previous css-parser based one.
-	"""
+	.. versionchanged:: 0.6.0  Added ``none_style`` option.
+	"""  # noqa: SXL001
 
 	serializer = CSSSerializer(
 			indent=indent,
@@ -150,6 +153,7 @@ def dumps(
 			minify=minify,
 			sort_keys=sort_keys,
 			check_circular=check_circular,
+			none_style=none_style,
 			)
 
 	css = serializer.encode(styles).rstrip()
@@ -170,6 +174,7 @@ def dump(
 		minify: bool = False,
 		sort_keys: bool = False,
 		check_circular: bool = True,
+		none_style: Union[Literal["none"], Literal["None"]] = "none",
 		) -> None:
 	r"""
 	Construct a style sheet from a dictionary and write it to ``fp``.
@@ -216,6 +221,7 @@ def dump(
 	:param minify: Minify the CSS. Overrides all other options.
 	:param sort_keys: Sort dictionary keys alphabetically.
 	:param check_circular: Check for circular references.
+	:param none_style: Whether to represent :py:obj:`None` as ``None`` or ``none``.
 
 	.. versionchanged:: 0.2.0
 
@@ -224,7 +230,8 @@ def dump(
 		* Added support for media at-rules.
 
 	.. versionchanged:: 0.5.0  New implementation. Output may differ slightly from previous css-parser based one.
-	"""
+	.. versionchanged:: 0.6.0  Added ``none_style`` option.
+	"""  # noqa: SXL001
 
 	css = dumps(
 			styles,
@@ -234,6 +241,7 @@ def dump(
 			sort_keys=sort_keys,
 			check_circular=check_circular,
 			minify=minify,
+			none_style=none_style,
 			)
 
 	if isinstance(fp, TextIOBase):

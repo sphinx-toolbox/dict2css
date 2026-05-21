@@ -1,0 +1,16 @@
+.wy-nav-content {
+  max-width: 1200rem !important;
+  z-index: 999;
+  }
+
+html {
+  scroll-behavior: smooth;
+  }
+
+li p:last-child {
+  font-size: 14px;
+  font-weight: 800 !important;
+  line-height: 1.5;
+  margin-bottom: 12em !important;
+  margin-top: 6em;
+  }
