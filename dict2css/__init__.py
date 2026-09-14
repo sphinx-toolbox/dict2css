@@ -113,13 +113,13 @@ def dumps(
 
 	The keys can also be media at-rules, with the values mappings of property names to their values:
 
-	.. code-block:: python
+	.. code-block:: python3
 
 		styles = {
-			"@media screen and (min-width: 870px)": {
-				".wy-nav-content": {"max-width": (px(1200), IMPORTANT)},
-				},
-			}
+				"@media screen and (min-width: 870px)": {
+					".wy-nav-content": {"max-width": (px(1200), IMPORTANT)},
+					},
+				}
 		print(dumps(styles))
 
 	.. code-block:: css
@@ -196,13 +196,13 @@ def dump(
 
 	The keys can also be media at-rules, with the values mappings of property names to their values:
 
-	.. code-block:: python
+	.. code-block:: python3
 
 		styles = {
-			"@media screen and (min-width: 870px)": {
-				".wy-nav-content": {"max-width": (px(1200), IMPORTANT)},
-				},
-			}
+				"@media screen and (min-width: 870px)": {
+					".wy-nav-content": {"max-width": (px(1200), IMPORTANT)},
+					},
+				}
 		dump(styles, ...)
 
 	.. code-block:: css
